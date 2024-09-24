@@ -5,10 +5,11 @@ import {
   useSetIndexFiltersMode,
   useIndexResourceState,
   Text,
+  Pagination,
   BlockStack,
   InlineGrid,
 } from "@shopify/polaris";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ProductRowMarkup from "./ProductRowMarkup";
 import AddProductModal from "./AddProductModal";
 
@@ -20,11 +21,12 @@ const randomDate = (start, end) => {
 
 function Products() {
   const { mode, setMode } = useSetIndexFiltersMode();
-
   const [queryValue, setQueryValue] = useState("");
-
   const [products, setProducts] = useState([]);
   const [filterType, setFilterType] = useState("all");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/posts")
@@ -48,22 +50,41 @@ function Products() {
   const filteredProducts = useMemo(
     () =>
       products?.filter((item) => {
-        switch (filterType) {
-          case "active":
-            return item.status;
+        const matchFilter =
+          filterType === "active"
+            ? item.status
+            : filterType === "no_rules"
+            ? item.ruleCount < 1
+            : true;
 
-          case "no_rules":
-            return item.ruleCount < 1;
+        const matchTitle = item.title
+          .toLowerCase()
+          .includes(queryValue.toLowerCase());
 
-          default:
-            return true;
-        }
+        return matchFilter && matchTitle;
       }),
-    [products, filterType]
+    [products, filterType, queryValue]
   );
 
+  const totalItems = filteredProducts.length;
+
+  const currentItems = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredProducts.slice(startIndex, endIndex);
+  }, [filteredProducts, currentPage, itemsPerPage]);
+
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
-    useIndexResourceState(filteredProducts);
+    useIndexResourceState(currentItems);
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(totalItems / itemsPerPage))
+      setCurrentPage(currentPage + 1);
+  };
 
   return (
     <Card>
@@ -93,7 +114,7 @@ function Products() {
             },
           ]}
           queryValue={queryValue}
-          queryPlaceholder="Searching in all"
+          queryPlaceholder="Search by title"
           onQueryChange={(value) => setQueryValue(value)}
           onQueryClear={() => setQueryValue("")}
           cancelAction={{
@@ -110,7 +131,7 @@ function Products() {
             singular: "product",
             plural: "products",
           }}
-          itemCount={filteredProducts.length}
+          itemCount={currentItems.length}
           selectedItemsCount={
             allResourcesSelected ? "All" : selectedResources.length
           }
@@ -124,7 +145,7 @@ function Products() {
             { title: "" },
           ]}
         >
-          {filteredProducts?.map((product) => (
+          {currentItems?.map((product) => (
             <ProductRowMarkup
               key={product.id}
               product={product}
@@ -132,6 +153,13 @@ function Products() {
             />
           ))}
         </IndexTable>
+
+        <Pagination
+          hasPrevious={currentPage > 1}
+          onPrevious={handlePreviousPage}
+          hasNext={currentPage < Math.ceil(totalItems / itemsPerPage)}
+          onNext={handleNextPage}
+        />
       </BlockStack>
     </Card>
   );
