@@ -84,7 +84,6 @@ const Dashboard = () => {
           fontSize: "20px",
           fontWeight: "650",
           marginBottom: "31px",
-          marginBottom: "10px",
         }}
       >
         Dashboard

@@ -13,10 +13,10 @@ import Settings from "./components/Settings";
 import { HomeIcon, OrderIcon, ProductIcon } from "@shopify/polaris-icons";
 
 function App() {
+  const isGithubPages = process.env.NODE_ENV === "production"; // Kiểm tra nếu đang chạy trên môi trường production (GitHub Pages)
+
   return (
-    <Router basename="/fe-test">
-      {" "}
-      {/* Thêm basename để hỗ trợ đúng trên GitHub Pages */}
+    <Router basename={isGithubPages ? "/fe-test" : "/"}>
       <Frame>
         <Page fullWidth>
           <div style={{ display: "flex", height: "100vh" }}>
@@ -40,29 +40,29 @@ function App() {
 }
 
 function CustomNavigation() {
-  const location = useLocation(); // Lấy đường dẫn hiện tại từ react-router-dom
+  const location = useLocation();
 
   return (
     <Navigation location={location.pathname}>
       <Navigation.Section
         items={[
           {
-            url: "/dashboard", // Cần phải giữ đường dẫn theo basename
+            url: "dashboard", // Không bắt đầu bằng "/"
             label: "Dashboard",
             icon: HomeIcon,
-            selected: location.pathname === "/dashboard", // Kiểm tra nếu đường dẫn là /dashboard thì đánh dấu selected
+            selected: location.pathname === "/dashboard",
           },
           {
-            url: "/products",
-            label: "Product",
+            url: "products", // Không bắt đầu bằng "/"
+            label: "Products",
             icon: OrderIcon,
-            selected: location.pathname === "/products", // Kiểm tra nếu đường dẫn là /products thì đánh dấu selected
+            selected: location.pathname === "/products",
           },
           {
-            url: "/settings",
-            label: "Setting",
+            url: "settings", // Không bắt đầu bằng "/"
+            label: "Settings",
             icon: ProductIcon,
-            selected: location.pathname === "/settings", // Kiểm tra nếu đường dẫn là /settings thì đánh dấu selected
+            selected: location.pathname === "/settings",
           },
         ]}
       />

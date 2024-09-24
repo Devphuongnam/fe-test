@@ -9,7 +9,7 @@ import {
   BlockStack,
   InlineGrid,
 } from "@shopify/polaris";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ProductRowMarkup from "./ProductRowMarkup";
 import AddProductModal from "./AddProductModal";
 
