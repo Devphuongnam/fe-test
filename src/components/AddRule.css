@@ -1,0 +1,22 @@
+.add-rule-row {
+  display: grid;
+  grid-column-gap: 5px;
+  grid-template-columns: 1fr 25px;
+
+  position: relative;
+
+  .Polaris-InlineStack {
+    display: flex;
+    flex-wrap: wrap;
+
+    > .Polaris-FormLayout__Item {
+      flex: 1 150px;
+    }
+  }
+
+  .Polaris-Button {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+  }
+}
