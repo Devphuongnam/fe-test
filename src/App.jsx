@@ -14,7 +14,9 @@ import { HomeIcon, OrderIcon, ProductIcon } from "@shopify/polaris-icons";
 
 function App() {
   return (
-    <Router>
+    <Router basename="/fe-test">
+      {" "}
+      {/* Thêm basename để hỗ trợ đúng trên GitHub Pages */}
       <Frame>
         <Page fullWidth>
           <div style={{ display: "flex", height: "100vh" }}>
@@ -45,7 +47,7 @@ function CustomNavigation() {
       <Navigation.Section
         items={[
           {
-            url: "/dashboard",
+            url: "/dashboard", // Cần phải giữ đường dẫn theo basename
             label: "Dashboard",
             icon: HomeIcon,
             selected: location.pathname === "/dashboard", // Kiểm tra nếu đường dẫn là /dashboard thì đánh dấu selected
