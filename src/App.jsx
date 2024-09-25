@@ -5,6 +5,7 @@ import {
   Routes,
   Navigate,
   useLocation,
+  HashRouter,
 } from "react-router-dom";
 import { Frame, Navigation, Page } from "@shopify/polaris";
 import Dashboard from "./components/Dashboard";
