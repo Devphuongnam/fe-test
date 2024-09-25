@@ -13,17 +13,13 @@ import Settings from "./components/Settings";
 import { HomeIcon, OrderIcon, ProductIcon } from "@shopify/polaris-icons";
 
 function App() {
-  const isGithubPages = process.env.NODE_ENV === "production"; // Kiểm tra nếu đang chạy trên môi trường production (GitHub Pages)
-
   return (
-    <Router basename={isGithubPages ? "/fe-test" : "/"}>
+    <Router>
       <Frame>
         <Page fullWidth>
           <div style={{ display: "flex", height: "100vh" }}>
-            {/* Navigation */}
             <CustomNavigation />
 
-            {/* Content */}
             <div style={{ marginLeft: "20px", flex: 1 }}>
               <Routes>
                 <Route path="/" element={<Navigate to="/dashboard" />} />
@@ -47,19 +43,19 @@ function CustomNavigation() {
       <Navigation.Section
         items={[
           {
-            url: "dashboard", // Không bắt đầu bằng "/"
+            url: "dashboard",
             label: "Dashboard",
             icon: HomeIcon,
             selected: location.pathname === "/dashboard",
           },
           {
-            url: "products", // Không bắt đầu bằng "/"
+            url: "products",
             label: "Products",
             icon: OrderIcon,
             selected: location.pathname === "/products",
           },
           {
-            url: "settings", // Không bắt đầu bằng "/"
+            url: "settings",
             label: "Settings",
             icon: ProductIcon,
             selected: location.pathname === "/settings",
